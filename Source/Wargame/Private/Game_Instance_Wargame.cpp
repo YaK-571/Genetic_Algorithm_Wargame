@@ -24,14 +24,26 @@ void UGame_Instance_Wargame::f_start ()
 	//если бой первый, то...
 	if (number_battle == 1)
 	{
-		//первое стартовое построение
 		squad_start[0][0] = 1;
+		squad_start[0][1] = 1;
+		squad_start[0][3] = 2;
+		squad_start[0][4] = 2;
+		squad_start[2][0] = 4;
+		squad_start[2][1] = 4;
+		squad_start[2][2] = 4;
+		squad_start[2][3] = 4;
+		squad_start[2][4] = 4;
+		squad_start[3][0] = 3;
+		squad_start[3][2] = 3;
+		squad_start[3][4] = 3;
+		//первое стартовое построение
+		/*squad_start[0][0] = 1;
 		squad_start[0][2] = 1;
 		squad_start[0][4] = 1;
 		squad_start[1][1] = 2;
 		squad_start[1][3] = 2;
 		squad_start[2][2] = 3;
-
+		*/
 		/*
 		squad_start[0][0] = 1;
 		squad_start[0][1] = 4;
@@ -45,14 +57,26 @@ void UGame_Instance_Wargame::f_start ()
 		//применить построение для всех отделений
 		for (int i_squad = 0; i_squad < 5; i_squad++)
 		{
-		
+			squad2[i_squad][0][0] = 1;
+			squad2[i_squad][0][1] = 1;
+			squad2[i_squad][0][3] = 2;
+			squad2[i_squad][0][4] = 2;
+			squad2[i_squad][2][0] = 4;
+			squad2[i_squad][2][1] = 4;
+			squad2[i_squad][2][2] = 4;
+			squad2[i_squad][2][3] = 4;
+			squad2[i_squad][2][4] = 4;
+			squad2[i_squad][3][0] = 3;
+			squad2[i_squad][3][2] = 3;
+			squad2[i_squad][3][4] = 3;
+		/*
 			squad2[i_squad][0][0] = 1;
 			squad2[i_squad][0][2] = 1;
 			squad2[i_squad][0][4] = 1;
 			squad2[i_squad][1][1] = 2;
 			squad2[i_squad][1][3] = 2;
 			squad2[i_squad][2][2] = 3;
-			
+			*/
 			/*
 			squad2[i_squad][0][0] = 4;
 			squad2[i_squad][0][1] = 4;
@@ -91,7 +115,7 @@ void UGame_Instance_Wargame::f_start ()
 			}
 		}
 	}
-	//f_mutation ();
+	f_mutation ();
 	}
 }
 
@@ -124,7 +148,7 @@ void UGame_Instance_Wargame::f_mutation ()
 	for (int number = 2; number <= 4; number++)
 	{
 		//повторить для n-го числа юнитов в отделении
-		for (size_t i = 0; i < 2; i++)
+		for (size_t i = 0; i < 3; i++)
 		{
 
 			i_tip = 0;
@@ -204,7 +228,7 @@ void UGame_Instance_Wargame::f_Excel (float abc1, float abc2, float abc3, float 
 	abc3 = int (abc3 * 100) / 100.0;//округление
 	abc4 = int (abc4 * 100) / 100.0;//округление
 	abc5 = int (abc5 * 100) / 100.0;//округление
-
+	/*
 	std::ofstream File;
 	File.open ("C:\\Users\\Кирилл\\Desktop\\test\\Save.csv", std::ios::app);
 	File << number_battle << ","<<abc1 << "," << abc2 << "," << abc3 << "," << abc4 << "," << abc5<<std::endl;
@@ -218,5 +242,27 @@ void UGame_Instance_Wargame::f_Excel (float abc1, float abc2, float abc3, float 
 	File2 << number_battle << "," << abc4 << std::endl;
 	File2 << number_battle << "," << abc5 << std::endl;
 	
+	*/
 
+	std::ofstream File;
+	File.open ("C:\\Wargame\\Save1.csv", std::ios::app);
+	if (File.is_open ())
+	{
+
+	}
+	File << number_battle << "," << abc1 << "," << abc2 << "," << abc3 << "," << abc4 << "," << abc5 << std::endl;
+
+	//сохранение с другим расположением данных
+	std::ofstream File2;
+	
+	File2.open ("C:\\Wargame\\Save2.csv", std::ios::app);
+	if (File2.is_open ())
+	{
+
+	}
+	File2 << number_battle << "," << abc1 << std::endl;
+	File2 << number_battle << "," << abc2 << std::endl;
+	File2 << number_battle << "," << abc3 << std::endl;
+	File2 << number_battle << "," << abc4 << std::endl;
+	File2 << number_battle << "," << abc5 << std::endl;
 }
