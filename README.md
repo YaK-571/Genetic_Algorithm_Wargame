@@ -7,4 +7,4 @@
 
 Часть кода, ответственная за оптимизацию строя, реализована в объекте класса GameInstance и находится по пути Wargame\Source\Wargame\Public\Game_Instance_Wargame
 
-Полный текст работы доступен по адресу: https://github.com/YaK-571/Genetic_Algorithm_Wargame/blob/main/Яковлев%20j4221.pdf
+Полный текст работы доступен по адресу: https://github.com/YaK-571/Genetic_Algorithm_Wargame/blob/c147685a54069b1a822dc191b682e61a4ddc4377/%D0%92%D0%9A%D0%A0%20%D0%AF%D0%BA%D0%BE%D0%B2%D0%BB%D0%B5%D0%B2%20%D0%9A%D0%90%20j4221.pdf
