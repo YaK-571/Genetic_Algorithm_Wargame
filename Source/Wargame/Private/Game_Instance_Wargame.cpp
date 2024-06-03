@@ -57,6 +57,7 @@ void UGame_Instance_Wargame::f_start ()
 		//применить построение для всех отделений
 		for (int i_squad = 0; i_squad < 5; i_squad++)
 		{
+		
 			squad2[i_squad][0][0] = 1;
 			squad2[i_squad][0][1] = 1;
 			squad2[i_squad][0][3] = 2;
@@ -69,27 +70,7 @@ void UGame_Instance_Wargame::f_start ()
 			squad2[i_squad][3][0] = 3;
 			squad2[i_squad][3][2] = 3;
 			squad2[i_squad][3][4] = 3;
-		/*
-			squad2[i_squad][0][0] = 1;
-			squad2[i_squad][0][2] = 1;
-			squad2[i_squad][0][4] = 1;
-			squad2[i_squad][1][1] = 2;
-			squad2[i_squad][1][3] = 2;
-			squad2[i_squad][2][2] = 3;
-			*/
-			/*
-			squad2[i_squad][0][0] = 4;
-			squad2[i_squad][0][1] = 4;
-			squad2[i_squad][0][2] = 4;
-			squad2[i_squad][0][3] = 4;
-			squad2[i_squad][0][4] = 4;
-			squad2[i_squad][2][0] = 4;
-			squad2[i_squad][2][1] = 4;
-			squad2[i_squad][2][2] = 4;
-			squad2[i_squad][2][3] = 4;
-			squad2[i_squad][2][4] = 4;
-			*/
-
+		
 			for (int x = 0; x < width; x++)
 			{
 				for (int y = 0; y < depth; y++)
@@ -103,19 +84,23 @@ void UGame_Instance_Wargame::f_start ()
 
 	else
 	{
-	//если бой не первый, то
-	//загрузить наиболее эффективные построения из предыдущего боя
-	for (int number = 0; number <= 1; number++)
-	{
-		for (int x = 0; x < width; x++)
+		//если бой не первый, то
+		//загрузить наиболее эффективные построения из предыдущего боя
+		for (int number = 0; number <= 1; number++)
 		{
-			for (int y = 0; y < depth; y++)
+			for (int x = 0; x < width; x++)
 			{
-				squad[number][x][y] = save_squad[number][x][y];
+				for (int y = 0; y < depth; y++)
+				{
+					squad[number][x][y] = save_squad[number][x][y];
+				}
 			}
 		}
-	}
-	f_mutation ();
+
+		if (stop == false)
+		{
+			f_mutation ();
+		}
 	}
 }
 
@@ -223,27 +208,23 @@ void UGame_Instance_Wargame::f_test_float (float abc)
 
 void UGame_Instance_Wargame::f_Excel (float abc1, float abc2, float abc3, float abc4, float abc5)
 {
+	coin_average = (abc1 + abc2 + abc3 + abc4 + abc5) / 5;
+	if (number_battle <= 3)
+	{ //подсчёт среднего значения баллов в первых боях
+		start_coin[number_battle - 1] = coin_average;
+	}
+	if (number_battle == 3)
+	{
+		start_coin_average = start_coin[0] + start_coin[1] + start_coin[2];
+	}
+	
+
 	abc1 = int (abc1 * 100) / 100.0;//округление
 	abc2 = int (abc2 * 100) / 100.0;//округление
 	abc3 = int (abc3 * 100) / 100.0;//округление
 	abc4 = int (abc4 * 100) / 100.0;//округление
 	abc5 = int (abc5 * 100) / 100.0;//округление
-	/*
-	std::ofstream File;
-	File.open ("C:\\Users\\Кирилл\\Desktop\\test\\Save.csv", std::ios::app);
-	File << number_battle << ","<<abc1 << "," << abc2 << "," << abc3 << "," << abc4 << "," << abc5<<std::endl;
-
-	//сохранение с другим расположением данных
-	std::ofstream File2;
-	File2.open ("C:\\Users\\Кирилл\\Desktop\\test\\Save2.csv", std::ios::app);
-	File2 << number_battle << "," << abc1 << std::endl;
-	File2 << number_battle << "," << abc2 << std::endl;
-	File2 << number_battle << "," << abc3 << std::endl;
-	File2 << number_battle << "," << abc4 << std::endl;
-	File2 << number_battle << "," << abc5 << std::endl;
 	
-	*/
-
 	std::ofstream File;
 	File.open ("C:\\Wargame\\Save1.csv", std::ios::app);
 	if (File.is_open ())
@@ -265,4 +246,25 @@ void UGame_Instance_Wargame::f_Excel (float abc1, float abc2, float abc3, float 
 	File2 << number_battle << "," << abc3 << std::endl;
 	File2 << number_battle << "," << abc4 << std::endl;
 	File2 << number_battle << "," << abc5 << std::endl;
+
+	if ((number_battle >= 3) && ((coin_average / start_coin_average) > 1.5))
+	{
+		//если значение целевой функции значительно превышает то, которое было на старте, то останови оптимизацию
+		stop = 1;
+		number_stop++;
+		File << "optimization is suspended" << std::endl; //поиск приостановлен
+		File2 << "optimization is suspended" << std::endl;
+	}
+	else if ((stop == 1)&&(number_stop < 3))
+	{
+		stop = 0;
+		number_stop = 0;
+		File << "The search continues" << std::endl; //поиск продолжен
+		File2 << "The search continues" << std::endl;
+	}
+	if (number_stop >= 3)
+	{
+	File << "Optimization is over" << std::endl; //оптимизация завершена
+	File2 << "Optimization is over" << std::endl;
+	}
 }

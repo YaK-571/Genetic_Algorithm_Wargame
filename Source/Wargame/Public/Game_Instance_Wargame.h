@@ -37,7 +37,12 @@ public:
 	float distance_unit[size_matrix];// расстояние между юнитами в разных отделениях
 	float distance; //евклидово расстояние
 
-
+	float coin_average; //среднее значение целевой функции за бой
+	float start_coin[3]; //баллы в первых трёх боях
+	float start_coin_average; //средний балл за первые три боя
+	bool stop = false; //происходит ли остановка оптимизации
+	int number_stop; // номер сражения после остановки оптимизации
+	
 
 	UFUNCTION (BlueprintCallable, Category = "Wargame")
 	void f_save (int number, int type, int x, int y);
@@ -58,6 +63,8 @@ public:
 	void f_Excel (float abc1, float abc2, float abc3, float abc4, float abc5); // сохранение данных в экселе
 
 	float f_distance (int index1, int index2); //рассчёт евклидова расстояния
+
+	
 
 private:
 	void f_mutation ();
