@@ -64,6 +64,8 @@ public:
 
 	float f_distance (int index1, int index2); //рассчёт евклидова расстояния
 
+	UFUNCTION (BlueprintCallable, Category = "Wargame")
+	void f_set_squad_start (int tip, int shirina, int glubina); //выбор стартового построения
 	
 
 private:

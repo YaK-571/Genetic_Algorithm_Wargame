@@ -17,6 +17,12 @@ void UGame_Instance_Wargame::f_save (int number, int type, int x, int y)
 
 }
 
+void UGame_Instance_Wargame::f_set_squad_start (int tip, int shirina, int glubina)
+{
+	squad_start[glubina][shirina] = tip;
+
+
+}
 
 void UGame_Instance_Wargame::f_start ()
 {
@@ -24,6 +30,7 @@ void UGame_Instance_Wargame::f_start ()
 	//если бой первый, то...
 	if (number_battle == 1)
 	{
+		/*
 		squad_start[0][0] = 1;
 		squad_start[0][1] = 1;
 		squad_start[0][3] = 2;
@@ -35,7 +42,8 @@ void UGame_Instance_Wargame::f_start ()
 		squad_start[2][4] = 4;
 		squad_start[3][0] = 3;
 		squad_start[3][2] = 3;
-		squad_start[3][4] = 3;
+		squad_start[3][4] = 3;*/
+
 		//первое стартовое построение
 		/*squad_start[0][0] = 1;
 		squad_start[0][2] = 1;
@@ -57,7 +65,7 @@ void UGame_Instance_Wargame::f_start ()
 		//применить построение для всех отделений
 		for (int i_squad = 0; i_squad < 5; i_squad++)
 		{
-		
+		/*
 			squad2[i_squad][0][0] = 1;
 			squad2[i_squad][0][1] = 1;
 			squad2[i_squad][0][3] = 2;
@@ -70,12 +78,13 @@ void UGame_Instance_Wargame::f_start ()
 			squad2[i_squad][3][0] = 3;
 			squad2[i_squad][3][2] = 3;
 			squad2[i_squad][3][4] = 3;
-		
+		*/
 			for (int x = 0; x < width; x++)
 			{
 				for (int y = 0; y < depth; y++)
 				{
 					squad[i_squad][x][y] = squad_start[x][y];
+					squad2[i_squad][x][y] = squad_start[x][y];
 				}
 			}
 
@@ -133,7 +142,7 @@ void UGame_Instance_Wargame::f_mutation ()
 	for (int number = 2; number <= 4; number++)
 	{
 		//повторить для n-го числа юнитов в отделении
-		for (size_t i = 0; i < 3; i++)
+		for (size_t i = 0; i < 4; i++)
 		{
 
 			i_tip = 0;
@@ -268,3 +277,4 @@ void UGame_Instance_Wargame::f_Excel (float abc1, float abc2, float abc3, float 
 	File2 << "Optimization is over" << std::endl;
 	}
 }
+
