@@ -24,7 +24,7 @@ public:
 	const static int size_matrix = width * depth; //размер элементов матрицы
 	int squad[size_army][width][depth]; //боевое построение разных групп
 	int squad2[size_army][width][depth]; //боевое построение команды врага
-	int squad_start[width][depth]; //боевое построение при первом запуске игры
+	int squad_start[width][depth]; //боевое построение при первом запуске игры. Также используется при изменении строя
 	int number_battle = 0; //номер итереции
 	int top_number[2]; // номера наиболее эффективных подразделений
 	int save_squad[2][width][depth]; // наиболее эффективные построения
@@ -42,6 +42,16 @@ public:
 	float start_coin_average; //средний балл за первые три боя
 	bool stop = false; //происходит ли остановка оптимизации
 	int number_stop; // номер сражения после остановки оптимизации
+
+	//состав армии в новом бою
+	int new_peshota;
+	int new_maschina;
+	int new_BTR;
+	int new_Tank;
+	bool smena_stroja = 0;
+	int unit_distribution = 0;
+
+	int similarity_units[6]{ 1,-1,2,-2,3,-3 }; //используется для распределения юнитов на позиции наиболее приближенных по характеристикам юнитов
 	
 
 	UFUNCTION (BlueprintCallable, Category = "Wargame")
@@ -67,10 +77,18 @@ public:
 	UFUNCTION (BlueprintCallable, Category = "Wargame")
 	void f_set_squad_start (int tip, int shirina, int glubina); //выбор стартового построения
 	
+	UFUNCTION (BlueprintCallable, Category = "Wargame")
+	void f_set_new_squad (int peshota, int maschina, int BTR, int Tank); //выбор стартового построения
+
+
 
 private:
 	void f_mutation ();
 	void f_test (FString abc);
 	void f_test_int (int abc);
 	void f_test_float (float abc);
+
+	int f_search1 (int unit_tschislo, int unit_tip); //первый этап поиска. Юниты, которые уже были в армии, встают на старые позиции
+	int f_search2 (int unit_tschislo, int unit_tip, int shodstvo); //второй этап поиска. Оставшиеся юниты располагаются на позиции схожих юнитов
+	int f_search3 (int unit_tschislo, int unit_tip); //третий этап сортировки. Заполняются оставшиеся места
 };

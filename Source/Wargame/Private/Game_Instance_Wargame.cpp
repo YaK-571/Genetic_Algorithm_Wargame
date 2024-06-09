@@ -27,8 +27,8 @@ void UGame_Instance_Wargame::f_set_squad_start (int tip, int shirina, int glubin
 void UGame_Instance_Wargame::f_start ()
 {
 	number_battle = number_battle + 1;
-	//если бой первый, то...
-	if (number_battle == 1)
+	//если бой первый, или состав армии поменялся, то...
+	if ((number_battle == 1)||(smena_stroja==1))
 	{
 		/*
 		squad_start[0][0] = 1;
@@ -89,6 +89,7 @@ void UGame_Instance_Wargame::f_start ()
 			}
 
 		}
+		smena_stroja = 0;
 	}
 
 	else
@@ -105,11 +106,10 @@ void UGame_Instance_Wargame::f_start ()
 				}
 			}
 		}
-
-		if (stop == false)
-		{
-			f_mutation ();
-		}
+	}
+	if (stop == false)
+	{
+		f_mutation ();
 	}
 }
 
@@ -278,3 +278,127 @@ void UGame_Instance_Wargame::f_Excel (float abc1, float abc2, float abc3, float 
 	}
 }
 
+void UGame_Instance_Wargame::f_set_new_squad (int peshota, int maschina, int BTR, int Tank)
+{
+	new_peshota = peshota;
+	new_maschina = maschina;
+	new_BTR = BTR;
+	new_Tank = Tank;
+	smena_stroja = 1;
+
+	//очистка массива для распределения
+	for (int x = 0; x <= 4; x++)
+	{	for (int y = 0; y <= 4; y++)
+		{
+		squad_start[x][y] = 0;
+		}
+	}
+	
+	//изменение строя
+	if(new_peshota>0)
+	{ 
+	new_peshota= new_peshota - f_search1 (new_peshota, 4);
+	}
+	if (new_maschina > 0)
+	{
+		new_maschina = new_maschina - f_search1 (new_maschina, 3);
+	}
+	if (new_BTR > 0)
+	{
+		new_BTR = new_BTR - f_search1 (new_BTR, 2);
+	}
+	if (new_Tank > 0)
+	{
+		new_Tank = new_Tank - f_search1 (new_Tank, 1);
+	}
+	
+	for (int i = 0; i <= 5; i++)
+	{
+		if (new_peshota > 0)
+		{
+			new_peshota = new_peshota - f_search2 (new_peshota, 4, similarity_units[i]);
+		}
+		if (new_maschina > 0)
+		{
+			new_maschina = new_maschina - f_search2 (new_maschina, 3, similarity_units[i]);
+		}
+		if (new_BTR > 0)
+		{
+			new_BTR = new_BTR - f_search2 (new_BTR, 2, similarity_units[i]);
+		}
+		if (new_Tank > 0)
+		{
+			new_Tank = new_Tank - f_search2 (new_Tank, 1, similarity_units[i]);
+		}
+	}
+	
+	if (new_peshota > 0)
+	{
+		new_peshota = new_peshota - f_search3 (new_peshota, 4);
+	}
+	if (new_maschina > 0)
+	{
+		new_maschina = new_maschina - f_search3 (new_maschina, 3);
+	}
+	if (new_BTR > 0)
+	{
+		new_BTR = new_BTR - f_search3 (new_BTR, 2);
+	}
+	if (new_Tank > 0)
+	{
+		new_Tank = new_Tank - f_search3 (new_Tank, 1);
+	}
+
+}
+
+int UGame_Instance_Wargame::f_search1 (int unit_tschislo, int unit_tip)
+{
+	//изменение строя
+	unit_distribution = 0;
+	for (int x = 0; x <= 4; x++)
+		for (int y = 0; y <= 4; y++)
+		{
+			if ((squad[0][x][y] == unit_tip) && (unit_distribution<unit_tschislo))
+			{
+
+				squad_start[x][y] = unit_tip;
+				squad[0][x][y] = 0;
+				unit_distribution++;
+			}
+
+		}
+	return unit_distribution;
+}
+
+int UGame_Instance_Wargame::f_search2 (int unit_tschislo, int unit_tip, int shodstvo)
+{
+	unit_distribution = 0;
+	for (int x = 0; x <= 4; x++)
+		for (int y = 0; y <= 4; y++)
+		{
+			if ((squad[0][x][y] == (unit_tip+ shodstvo)) && (unit_distribution < unit_tschislo))
+			{
+				squad_start[x][y] = unit_tip;
+				squad[0][x][y] = 0;
+				unit_distribution++;
+			}
+		}
+	return unit_distribution;
+}
+
+int UGame_Instance_Wargame::f_search3 (int unit_tschislo, int unit_tip)
+{
+	unit_distribution = 0;
+	for (int x = 0; x <= 4; x++)
+		for (int y = 0; y <= 4; y++)
+		{
+			if ((squad_start[x][y] == 0) && (unit_distribution < unit_tschislo))
+			{
+
+				squad_start[x][y] = unit_tip;
+				unit_distribution++;
+			}
+
+		}
+	return unit_distribution;
+}
