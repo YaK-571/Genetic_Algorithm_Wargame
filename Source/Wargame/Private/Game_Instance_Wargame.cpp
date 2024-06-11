@@ -9,6 +9,7 @@
 #include <random>
 #include <iostream>
 #include <iomanip>
+#include <chrono>
 
 
 void UGame_Instance_Wargame::f_save (int number, int type, int x, int y)
@@ -26,6 +27,9 @@ void UGame_Instance_Wargame::f_set_squad_start (int tip, int shirina, int glubin
 
 void UGame_Instance_Wargame::f_start ()
 {
+	//секундомер
+	auto time_start = std::chrono::high_resolution_clock::now ();
+
 	number_battle = number_battle + 1;
 	//если бой первый, или состав армии поменялся, то...
 	if ((number_battle == 1)||(smena_stroja==1))
@@ -111,6 +115,17 @@ void UGame_Instance_Wargame::f_start ()
 	{
 		f_mutation ();
 	}
+
+	auto time_end = std::chrono::high_resolution_clock::now (); //остановить замер времени
+	std::chrono::nanoseconds time = (time_end - time_start);
+	
+	std::ofstream TimeSave;
+	TimeSave.open ("C:\\Wargame\\TimeSave.csv", std::ios::app);
+	if (TimeSave.is_open ())
+	{
+
+	}
+		TimeSave << time.count()<< std::endl;
 }
 
 int UGame_Instance_Wargame::f_get_squad (int number_squad, int x, int y)
